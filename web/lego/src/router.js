@@ -6,6 +6,7 @@ import DashMembers from './views/dashMembers.vue'
 import Home from './views/home.vue'
 import Content from './views/content.vue'
 import Upload from './views/upload.vue'
+import Register from './views/register.vue'
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ export default new Router({
       path: '/upload',
       name: 'Upload',
       component: Upload
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     }
   ]
 })

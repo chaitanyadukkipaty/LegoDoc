@@ -12,7 +12,7 @@ var path = require('path');
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, '/home/sephiroth/Projects/LegoDoc/Uploads');
+      cb(null, __dirname+'/Uploads');
     },
     filename: (req, file, cb) => {
       cb(null, file.fieldname + '-' + Date.now()+'.docx');
@@ -60,21 +60,24 @@ app.post('/login', function(req,res){
 
 //Registering a new user
 app.post('/register',function(req,res){
-    if(req.body.id && req.body.password && req.body.name){
-        var userData={
-            id :req.body.id,
+    console.log(req.body);
+
+        const userData={
+            username :req.body.username,
             name : req.body.name,
             password : req.body.password,
+            email: req.body.email
         };
         User.create(userData, function(error, user){
             if(error){
                 res.sendStatus(401);
             }
             else{
-                res.send(req.body.id);
+                res.sendStatus(200);
             }
         });
-    }
+
+    console.log(userData);
 });
 
 app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
@@ -84,7 +87,7 @@ app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
         type : req.body.type,
         date : req.body.date,
         des : req.body.des,
-        path_to_file : '/home/sephiroth/Projects/LegoDoc/Uploads/'+req.file.filename
+        path_to_file : __dirname+'/Uploads/'+req.file.filename
     };
     Template.create(templateData)
         .then((template)=>{

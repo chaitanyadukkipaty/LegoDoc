@@ -5,7 +5,10 @@ module.exports = mongoose.model("User",{
     type : String,
     required : true
   },
-  email : String,
+  email : {
+    type : String,
+    required : true
+  },
   name : String,
   password : {
     type : String,
