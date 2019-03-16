@@ -12,8 +12,7 @@
               Username: {{this.username}}<br />
             </h3>
             </v-card-text>
-            <div id="abc" class="editor" contenteditable style="border-style: solid; border-width: 2px;">
-            </div>
+            <editor/>
             <v-btn @click="clickme" class="sai" block color="primary" dark>Block Button</v-btn>
         </v-card>
 
@@ -25,11 +24,13 @@
 <script>
 import axios from 'axios';
 import commets from '../components/comments.vue'
+import editor from '../components/editor.vue'
 export default {
   name: 'templatecontent',
   _id: '',
   components: {
-    commets
+    commets,
+    editor
   },
   data() {
     return {

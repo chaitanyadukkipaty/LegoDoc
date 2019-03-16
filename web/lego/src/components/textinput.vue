@@ -25,10 +25,11 @@
                   label="Type"
                 ></v-select>
           </v-form>
-          <div class="heading">Your Important Document</div>
+          <!-- <div class="heading">Your Important Document</div>
           <div id="calden" class="editor" contenteditable style="border-style: solid; border-width: 2px;">
             <p>Your document goes here</p>
-          </div>
+          </div> -->
+          <editor/>
         </v-flex>
         <v-btn @click="clickme" class="sai" block color="secondary" dark>Block Button</v-btn>
       </v-layout>
@@ -37,9 +38,13 @@
 </template>
 
 <script>
+import editor from './editor.vue'
 import axios from 'axios';
 export default {
   name: 'textinput',
+  components: {
+    editor
+  },
   data() {
     return {
       valid: false,
