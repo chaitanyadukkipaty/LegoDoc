@@ -8,7 +8,7 @@ var Template = require('./models/template');
 var TemplateType = require('./models/typeofd');
 var mongoose = require('mongoose');
 var path = require('path');
-var fs = require('fs');
+var fs = require('promise-fs');
 var morgan       = require('morgan');
 
 var multer = require('multer');
@@ -32,6 +32,8 @@ app.use(cors());
 
 var conString = "mongodb://127.0.0.1:27017/LegoDoc";
 mongoose.Promise=Promise;
+
+
 
 //Connecting to the database
 mongoose.connect(conString,(err) => {
@@ -83,6 +85,48 @@ app.post('/register',function(req,res){
     console.log(userData);
 });
 
+app.post('/viewTemplate', (req,res)=>{
+    var tid = req.body._id;
+    var templateFinal={
+        name :""
+    };
+    // Template.findById(tid,(error,template)=>{
+    //     templateFinal = template;
+    //     fs.readFile(template.path_to_file,{encoding:"utf-8"},(error,data)=>{
+    //         templateFinal.template = data;
+    //     });
+    // });
+    // res.send(templateFinal);
+
+    Template.findById(tid)
+    .then((template)=>{
+        
+         fs.readFile(template.path_to_file,{encoding:"utf-8"})
+            .then((data)=>{
+                console.log(typeof(data));
+                templateFinal.username = template.username;
+                templateFinal.name = template.name;
+                templateFinal.type = template.type;
+                templateFinal.des = template.des;
+                templateFinal.upvotes = template.upvotes-template.downvotes;
+                templateFinal.percentage = (template.upvotes-template.downvotes)*100/(template.upvotes+template.downvotes);
+                templateFinal.template = data;
+                return templateFinal
+            })
+            .then((temp)=>{
+                console.log(temp);
+                res.send(temp);
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+        
+    })
+    .catch((err)=>{
+        console.log(err)
+    });
+});
+
 app.post('/uploadTemplate',(req,res)=>{
     var templateData ={
         username : req.body.username,
@@ -94,7 +138,7 @@ app.post('/uploadTemplate',(req,res)=>{
     var finalString = "";
     for(var i = 0; i<temp.length; i++){
         if(temp.charAt(i)=='~'){
-            finalString+="<span class=\"field\"><mark>";
+            finalString+='<span class="field"><mark>';
             for(i=i+1;i<temp.length;i++){
                 if(temp.charAt(i)=='~'){
                     break;
@@ -110,7 +154,7 @@ app.post('/uploadTemplate',(req,res)=>{
         }
     }
     var fileName = String(Date.now());
-    var path_to_file = __direname + '/Uploads/'+fileName+'.txt';
+    var path_to_file = __dirname + '/Uploads/'+fileName+'.txt';
     fs.writeFile(path_to_file, finalString, (err) => {
         if(err) {
             return console.log(err);
@@ -120,6 +164,7 @@ app.post('/uploadTemplate',(req,res)=>{
     console.log("The file was saved!");
     Template.create(templateData)
         .then((template)=>{
+            res.send(template._id);
             templateData._id=template._id;
             User.update({username:template.id},{
                 $push:{
@@ -141,41 +186,10 @@ app.post('/uploadTemplate',(req,res)=>{
             console.log(err);
         });
     console.log(finalString);
-    res.sendStatus(200);
+    // res.sendStatus(200);
 });
 
-// app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
-//     var templateData = {
-//         username : req.body.username,
-//         name : req.body.name,
-//         type : req.body.type,
-//         date : req.body.date,
-//         des : req.body.des,
-//         path_to_file : __dirname+'/Uploads/'+req.file.filename
-//     };
-//     Template.create(templateData)
-//         .then((template)=>{
-//             templateData._id=template._id;
-//             User.update({username:template.id},{
-//                 $push:{
-//                     submitted_templates :{ 
-//                         name : template.name,
-//                         id : template._id
-//                     }
-//                 }
-//             },function(error,success){
-//                 if(error){
-//                     console.log(error);
-//                 }
-//                 else{
-//                     console.log(success)
-//                 }
-//             });
-//         })
-//         .catch((err)=>{
-//             console.log(err);
-//         });
-// });
+
 
 //home page
 app.post('/',(req,res)=>{
