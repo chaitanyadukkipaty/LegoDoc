@@ -8,6 +8,7 @@ var Template = require('./models/template');
 var TemplateType = require('./models/typeofd');
 var mongoose = require('mongoose');
 var path = require('path');
+var fs = require('fs');
 
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -78,6 +79,16 @@ app.post('/register',function(req,res){
         });
 
     console.log(userData);
+});
+
+app.post('/receiveFile', (req, res) => {
+    var finalString = "";
+    fs.writeFile(__dirname+'Uploads/', finalString, (err) => {
+        if(err) {
+            return console.log(err);
+        };
+    )};
+    console.log("The file was saved!");
 });
 
 app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
