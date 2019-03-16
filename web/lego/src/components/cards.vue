@@ -8,7 +8,7 @@
             md6
             lg4
             v-for="n in array"
-            :key="n.name"
+            :key="n._id"
           >
             <v-card
               class="mx-auto"
@@ -57,7 +57,7 @@
                      <v-icon class="mr-1 myclass" large>keyboard_arrow_down</v-icon>
                     </v-btn>
 
-                    <v-icon class="mr-1" large right>share</v-icon>
+                    <!-- <v-icon class="mr-1" large right>share</v-icon> -->
 
                   </v-flex>
                   </v-layout>
@@ -68,6 +68,26 @@
         </v-layout>
       </v-container>
     </v-app>
+
+
+      <div class="center">
+        <div id="calden" class="editor" contenteditable>
+          <h1>Simple Html editor</h1>
+          <p>Good to start</p>
+        </div>
+      </div>
+
+      <div class="center">
+
+        <button @click="clickme" class="sai btn">GetHtml</button>
+      <div class="center">
+        <section class="getcontent">
+        </section>
+      </div>
+
+    </div>
+
+
   </div>
 </template>
 
@@ -102,9 +122,17 @@ export default {
   },
   methods: {
     myfun() {
-      if(this.authenticated == false){
+      if(this.authenticated == true){
         this.$router.replace({ name: 'Content', params: { tid: this.myname } });
       }
+    },
+    clickme() {
+      var btn = document.querySelector(".sai");
+      var content = document.querySelector(".getcontent");
+      var editorContent = document.querySelector(".editor");
+      var s = editorContent.innerHTML;
+      content.style.display = "block";
+      content.textContent = s;
     },
     upvote(n) {
       if(n.upvoteflag == false){
@@ -123,7 +151,7 @@ export default {
   },
   created() {
     this.tid = this.$route.params.tid;
-    axios.post('http://10.42.0.61:8081/', {
+    axios.post('http://192.168.0.104:8081/', {
      })
        .then((res) => {
          console.log(res.data);
