@@ -1,13 +1,13 @@
 <template lang="html">
-  <btn />
+  <textinput />
 </template>
 
 <script>
-import btn from '../components/btn.vue'
+import textinput from '../components/textinput.vue'
 export default {
   name: 'upload',
   components: {
-    btn
+    textinput
   }
 }
 </script>

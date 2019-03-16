@@ -40,6 +40,9 @@
                     v-model="password"
                     required>
                     </v-text-field>
+                    <!-- <vue-recaptcha sitekey="Your key here">
+                      <button>Click me</button>
+                    </vue-recaptcha> -->
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -60,6 +63,7 @@
 
 <script>
 import axios from 'axios';
+import VueRecaptcha from 'vue-recaptcha';
 export default {
   name: 'register',
   data() {
@@ -70,7 +74,14 @@ export default {
       password: ""
     }
   },
-
+  // mounted() {
+  //   let recaptchaScript = document.createElement('script')
+  //   recaptchaScript.setAttribute('src', 'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit')
+  //   document.head.appendChild(recaptchaScript);
+  //   let recaptchaScript1 = document.createElement('script')
+  //   recaptchaScript1.setAttribute('src', 'https://unpkg.com/vue-recaptcha@latest/dist/vue-recaptcha.js')
+  //   document.head.appendChild(recaptchaScript1);
+  // },
   methods : {
     validate () {
         if (this.$refs.form.validate()) {
@@ -81,7 +92,7 @@ export default {
           const val = {username,name,email,password}
           console.log(typeof(val))
           //this.$router.app.$emit("authenticated",true);
-          axios.post('http://10.42.0.61:8081/register', {
+          axios.post('http://192.168.0.104:8081/register', {
             username,
             name,
             email,

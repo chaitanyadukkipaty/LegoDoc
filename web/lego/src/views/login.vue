@@ -71,15 +71,16 @@ import axios from 'axios';
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-          const id=this.id;
+          const username=this.id;
           const password=this.password;
           //this.$router.app.$emit("authenticated",true);
-          axios.post('http://10.42.0.61:8081/login', {
-            id,
+          axios.post('http://192.168.0.104:8081/login', {
+            username,
             password
           })
             .then((res) => {
-              console.log(res.data);
+              this.$emit("authenticated",true);
+              this.$router.replace({ name: 'Home', params: { id: this.id } });
             })
             .catch();
         }

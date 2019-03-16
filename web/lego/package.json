@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "vue": "^2.6.6",
+    "vue-recaptcha": "^1.1.1",
     "vue-router": "^3.0.1",
     "vuetify": "^1.5.6"
   },

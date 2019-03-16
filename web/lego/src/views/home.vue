@@ -1,7 +1,6 @@
 <template lang="html">
   <div class="">
   <cards v-bind:authenticated="authenticated"/>
-  <h1 v-if="authenticated ==false">rofh</h1>
   </div>
 
 </template>
