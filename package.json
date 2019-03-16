@@ -1,0 +1,24 @@
+{
+  "name": "legodoc",
+  "version": "1.0.0",
+  "description": "An open source web application to help users reduce the amount of money and time taken to create web documents by using pre-written templates provided by other users.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaitanyadukkipaty/LegoDoc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chaitanyadukkipaty/LegoDoc/issues"
+  },
+  "homepage": "https://github.com/chaitanyadukkipaty/LegoDoc#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "http": "0.0.0",
+    "mongoose": "^5.4.19"
+  }
+}
