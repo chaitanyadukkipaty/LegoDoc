@@ -81,25 +81,41 @@ app.post('/register',function(req,res){
     console.log(userData);
 });
 
-app.post('/receiveFile', (req, res) => {
-    var finalString = "";
-    fs.writeFile(__dirname+'Uploads/', finalString, (err) => {
-        if(err) {
-            return console.log(err);
-        };
-    )};
-    console.log("The file was saved!");
-});
-
-app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
-    var templateData = {
+app.post('/uploadTemplate',(req,res)=>{
+    var templateData ={
         username : req.body.username,
         name : req.body.name,
         type : req.body.type,
-        date : req.body.date,
-        des : req.body.des,
-        path_to_file : __dirname+'/Uploads/'+req.file.filename
+        des : req.body.des
     };
+    var temp = req.body.template;
+    var finalString = "";
+    for(var i = 0; i<temp.length; i++){
+        if(temp.charAt(i)=='~'){
+            finalString+="<span class=\"field\"><mark>";
+            for(i=i+1;i<temp.length;i++){
+                if(temp.charAt(i)=='~'){
+                    break;
+                }
+                else{
+                    finalString+=temp.charAt(i);
+                }
+            }
+            finalString+="</mark></span>";
+        }
+        else{
+            finalString+=temp.charAt(i);
+        }
+    }
+    var fileName = String(Date.now());
+    var path_to_file = __direname + '/Uploads/'+fileName+'.txt';
+    fs.writeFile(path_to_file, finalString, (err) => {
+        if(err) {
+            return console.log(err);
+        }
+    });
+    templateData.path_to_file = path_to_file;
+    console.log("The file was saved!");
     Template.create(templateData)
         .then((template)=>{
             templateData._id=template._id;
@@ -122,7 +138,42 @@ app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
         .catch((err)=>{
             console.log(err);
         });
+    console.log(finalString);
+    res.sendStatus(200);
 });
+
+// app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
+//     var templateData = {
+//         username : req.body.username,
+//         name : req.body.name,
+//         type : req.body.type,
+//         date : req.body.date,
+//         des : req.body.des,
+//         path_to_file : __dirname+'/Uploads/'+req.file.filename
+//     };
+//     Template.create(templateData)
+//         .then((template)=>{
+//             templateData._id=template._id;
+//             User.update({username:template.id},{
+//                 $push:{
+//                     submitted_templates :{ 
+//                         name : template.name,
+//                         id : template._id
+//                     }
+//                 }
+//             },function(error,success){
+//                 if(error){
+//                     console.log(error);
+//                 }
+//                 else{
+//                     console.log(success)
+//                 }
+//             });
+//         })
+//         .catch((err)=>{
+//             console.log(err);
+//         });
+// });
 
 //home page
 app.post('/',(req,res)=>{
