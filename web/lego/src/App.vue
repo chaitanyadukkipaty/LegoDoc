@@ -2,6 +2,7 @@
   <div id="app">
     <head>
       <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons' rel="stylesheet">
+
     </head>
     <v-app id="inspire">
       <v-toolbar dark color="primary">
@@ -9,6 +10,7 @@
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
           <v-btn flat to="/home" v-if="authenticated == false">Home</v-btn>
+          <v-btn flat to="/home" v-if="authenticated">Home</v-btn>
           <v-btn flat to="/upload" v-if="authenticated">Upload</v-btn>
           <v-btn flat to="/login" v-if="authenticated == false">Login</v-btn>
           <v-btn flat to="/register" v-if="authenticated == false">Register</v-btn>

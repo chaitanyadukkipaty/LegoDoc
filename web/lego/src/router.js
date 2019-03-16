@@ -4,7 +4,7 @@ import Login from './views/login.vue'
 import DashAdd from './views/dashAdd.vue'
 import DashMembers from './views/dashMembers.vue'
 import Home from './views/home.vue'
-import Content from './views/content.vue'
+import TemplateContent from './views/content.vue'
 import Upload from './views/upload.vue'
 import Register from './views/register.vue'
 
@@ -29,9 +29,9 @@ export default new Router({
       component: Home
     },
     {
-      path: '/content',
-      name: 'Content',
-      component: Content
+      path: '/templatecontent',
+      name: 'TemplateContent',
+      component: TemplateContent
     },
     {
       path: '/upload',

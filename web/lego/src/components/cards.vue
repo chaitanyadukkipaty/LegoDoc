@@ -17,7 +17,7 @@
               max-width="400"
 
             >
-              <v-card-title @click="myfun">
+              <v-card-title @click="myfun(n)">
                 <span class="headline font-weight-bold">{{n.name}}</span>
               </v-card-title>
 
@@ -68,26 +68,6 @@
         </v-layout>
       </v-container>
     </v-app>
-
-
-      <div class="center">
-        <div id="calden" class="editor" contenteditable>
-          <h1>Simple Html editor</h1>
-          <p>Good to start</p>
-        </div>
-      </div>
-
-      <div class="center">
-
-        <button @click="clickme" class="sai btn">GetHtml</button>
-      <div class="center">
-        <section class="getcontent">
-        </section>
-      </div>
-
-    </div>
-
-
   </div>
 </template>
 
@@ -121,9 +101,9 @@ export default {
     }
   },
   methods: {
-    myfun() {
+    myfun(n) {
       if(this.authenticated == true){
-        this.$router.replace({ name: 'Content', params: { tid: this.myname } });
+        this.$router.replace({ name: 'TemplateContent', params: { _id: n._id} });
       }
     },
     clickme() {
@@ -150,7 +130,7 @@ export default {
     }
   },
   created() {
-    this.tid = this.$route.params.tid;
+    //this.tid = this.$route.params.tid;
     axios.post('http://192.168.0.104:8081/', {
      })
        .then((res) => {
