@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 module.exports=mongoose.model("Template",{
-    id : String,
+    username : String,
     name : String,
     type : String,
     date : String,

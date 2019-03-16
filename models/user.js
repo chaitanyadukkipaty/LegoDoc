@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
 //MongoDB schema for users
 module.exports = mongoose.model("User",{
-  id : {
+  username : {
     type : String,
     required : true
   },
+  email : String,
   name : String,
   password : {
     type : String,

@@ -7,17 +7,18 @@ var User = require('./models/user');
 var Template = require('./models/template');
 var TemplateType = require('./models/typeofd');
 var mongoose = require('mongoose');
+var path = require('path');
+
 var multer = require('multer');
-
-// var storage = multer.diskStorage({
-// 	destination: function(req, file, callback) {
-// 		callback(null, './uploads');
-// 	},
-// 	filename: function(req, file, callback) {
-// 		callback(null, req. + path.extname(file.originalname));
-// 	}
-// })
-
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, '/home/sephiroth/Projects/LegoDoc/Uploads');
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now()+'.docx');
+    }
+});
+var upload = multer({storage: storage});
 const request = require('request');
 
 app.use(bodyParser.json()); // get information from html forms
@@ -76,36 +77,24 @@ app.post('/register',function(req,res){
     }
 });
 
-app.post('/fileUpload',(req,res)=>{
-    console.log(req.body)
-    var templateDate = {
+app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
+    var templateData = {
+        username : req.body.username,
         name : req.body.name,
         type : req.body.type,
         date : req.body.date,
-        des : req.body.des
+        des : req.body.des,
+        path_to_file : '/home/sephiroth/Projects/LegoDoc/Uploads/'+req.file.filename
     };
-    Template.create(templateDate,function(error,template){
-        if(error){
-            console.log(error);
-        }
-        else{
-            console.log("Success");
-            res.sendStatus(200);
-        }
-    });
-    // var upload = multer({
-	// 	storage: storage,
-	// 	fileFilter: function(req, file, callback) {
-	// 		var ext = path.extname(file.originalname)
-	// 		if (ext !== '.docx' && ext !== '.doc') {
-	// 			return callback(res.end('Only .docx or .doc files are allowed'), null);
-	// 		}
-	// 		callback(null, true);
-	// 	}
-	// }).single('userFile');
-	// upload(req, res, function(err) {
-	// 	res.end('File is uploaded')
-	// });
+    Template.create(templateData)
+        .then((template)=>{
+            templateData._id=template._id;
+            User.update({username:template.id})
+            
+        })
+        .catch((err)=>{
+            console.log(err);
+        });
 });
 
 //home page
