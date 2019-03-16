@@ -8,16 +8,17 @@
             md6
             lg4
             v-for="n in array"
-            :key="n.title"
+            :key="n.name"
           >
             <v-card
               class="mx-auto"
               color="#26c6da"
               dark
               max-width="400"
+              @click="myfun"
             >
               <v-card-title>
-                <span class="headline font-weight-bold">{{n.title}}</span>
+                <span class="headline font-weight-bold">{{n.name}}</span>
               </v-card-title>
 
               <v-card-text class="title">
@@ -32,7 +33,7 @@
                   >
                   <v-flex xs12>
                     <v-icon class="mr-1" large left>keyboard_arrow_up</v-icon>
-                    <span class="subheading mr-2">256</span>
+                    <span class="subheading mr-2">{{n.upvotes}}</span>
                     <v-icon class="mr-1" large>keyboard_arrow_down</v-icon>
                     <v-icon class="mr-1" large right>share</v-icon>
                   </v-flex>
@@ -48,6 +49,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'cards',
   data() {
@@ -57,14 +59,25 @@ export default {
         {
           tid: "1",
           name: "Some random title",
+          type: "something",
           des: "Some random Description",
-          
+          upvotes: "100",
+          percentage: "69"
         },
         {
+          tid: "2",
           name: "Some other random title",
-          des: "Some other random Description and ioewh igehoig hewio gfioew hgie hg i"
+          type: "something",
+          des: "Some other random Description",
+          upvotes: "50",
+          percentage: "69"
         },
       ],
+    }
+  },
+  methods: {
+    myfun() {
+      this.$router.replace({ name: 'Content', params: { tid: this.myname } });
     }
   }
 }
