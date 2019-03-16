@@ -33,7 +33,7 @@ app.use(cors());
 var conString = "mongodb://127.0.0.1:27017/LegoDoc";
 mongoose.Promise=Promise;
 
-var phantom = require('phantom');   
+var phantom = require('phantom');
 
 //Connecting to the database
 mongoose.connect(conString,(err) => {
@@ -44,7 +44,7 @@ mongoose.connect(conString,(err) => {
  //login
 app.post('/login', function(req,res){
     // Request.get()
-    var query = User.where({id:req.body.id});
+    var query = User.where({username:req.body.username});
     query.findOne((err,user)=>{
         if(err){
             return err;
@@ -54,7 +54,7 @@ app.post('/login', function(req,res){
         }
         else{
             if(req.body.password==user.password){
-                res.send(req.body.id);
+                res.send(req.body.username);
             }
             else{
                 res.sendStatus(500);
@@ -136,7 +136,7 @@ app.post('/viewTemplate', (req,res)=>{
 
     Template.findById(tid)
     .then((template)=>{
-        
+
          fs.readFile(template.path_to_file,{encoding:"utf-8"})
             .then((data)=>{
                 console.log(typeof(data));
@@ -156,7 +156,7 @@ app.post('/viewTemplate', (req,res)=>{
             .catch((err)=>{
                 console.log(err);
             })
-        
+
     })
     .catch((err)=>{
         console.log(err)
@@ -204,7 +204,7 @@ app.post('/uploadTemplate',(req,res)=>{
             templateData._id=template._id;
             User.update({username:template.id},{
                 $push:{
-                    submitted_templates :{ 
+                    submitted_templates :{
                         name : template.name,
                         id : template._id
                     }
@@ -236,6 +236,7 @@ app.post('/',(req,res)=>{
             var upvotes = temp.upvotes-temp.downvotes;
             var percentage = upvotes*100/(temp.upvotes+temp.downvotes);
             toSend.push({
+                _id:temp._id,
                 name:temp.name,
                 type:temp.type,
                 date:temp.date,
