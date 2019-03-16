@@ -16,7 +16,7 @@
           <v-btn flat v-if="authenticated" to="/" v-on:click.native="logout()" replace>Logout</v-btn> -->
         </v-toolbar-items>
       </v-toolbar>
-      <router-view @authenticated="setAuthenticated" />
+      <router-view v-bind:authenticated="authenticated" @authenticated="setAuthenticated" />
     </v-app>
   </div>
 </template>

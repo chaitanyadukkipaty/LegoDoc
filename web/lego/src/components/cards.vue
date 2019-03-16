@@ -15,9 +15,9 @@
               color="#26c6da"
               dark
               max-width="400"
-              @click="myfun"
+
             >
-              <v-card-title>
+              <v-card-title @click="myfun">
                 <span class="headline font-weight-bold">{{n.name}}</span>
               </v-card-title>
 
@@ -32,10 +32,33 @@
                     justify-start
                   >
                   <v-flex xs12>
-                    <v-icon class="mr-1" large left>keyboard_arrow_up</v-icon>
+
+                    <v-btn  v-if="n.upvoteflag == true" @click="upvote(n)" flat icon
+                     :id="iconID"
+                     slot="activator">
+                     <v-icon class="mr-1" large left>keyboard_arrow_up</v-icon>
+                    </v-btn>
+
+                    <v-btn v-if="n.upvoteflag == false" @click="upvote(n)" flat icon
+                     slot="activator">
+                     <v-icon  class="mr-1" large left>keyboard_arrow_up</v-icon>
+                    </v-btn>
+
                     <span class="subheading mr-2">{{n.upvotes}}</span>
-                    <v-icon class="mr-1" large>keyboard_arrow_down</v-icon>
+
+                    <v-btn v-if="n.downvoteflag == true" @click="downvote(n)" flat icon
+                     :id="iconID"
+                     slot="activator">
+                     <v-icon  class="mr-1 myclass" large>keyboard_arrow_down</v-icon>
+                    </v-btn>
+
+                    <v-btn v-if="n.downvoteflag == false" @click="downvote(n)" flat icon
+                     slot="activator">
+                     <v-icon class="mr-1 myclass" large>keyboard_arrow_down</v-icon>
+                    </v-btn>
+
                     <v-icon class="mr-1" large right>share</v-icon>
+
                   </v-flex>
                   </v-layout>
                 </v-list-tile>
@@ -52,36 +75,67 @@
 import axios from 'axios';
 export default {
   name: 'cards',
+  props: ["authenticated"],
   data() {
     return {
       myname: 'caldem',
+      iconID: 'myID',
       array: [
         {
           tid: "1",
           name: "Some random title",
           type: "something",
           des: "Some random Description",
-          upvotes: "100",
-          percentage: "69"
+          upvotes: 100,
+          percentage: 60
         },
         {
           tid: "2",
           name: "Some other random title",
           type: "something",
           des: "Some other random Description",
-          upvotes: "50",
-          percentage: "69"
+          upvotes: 50,
+          percentage: 69
         },
       ],
     }
   },
   methods: {
     myfun() {
-      this.$router.replace({ name: 'Content', params: { tid: this.myname } });
+      if(this.authenticated == false){
+        this.$router.replace({ name: 'Content', params: { tid: this.myname } });
+      }
+    },
+    upvote(n) {
+      if(n.upvoteflag == false){
+        n.upvotes = n.upvotes + 1;
+        n.upvoteflag = true;
+        n.downvoteflag = false;
+      }
+    },
+    downvote(n){
+      if(n.downvoteflag == false){
+      n.upvotes = n.upvotes - 1;
+      n.upvoteflag = false;
+      n.downvoteflag = true;
+      }
     }
+  },
+  created() {
+    this.tid = this.$route.params.tid;
+    axios.post('http://10.42.0.61:8081/', {
+     })
+       .then((res) => {
+         console.log(res.data);
+         this.array = res.data;
+       })
+       .catch();
   }
 }
 </script>
 
 <style lang="css" scoped>
+#myID {
+  color: red;
+}
 </style>

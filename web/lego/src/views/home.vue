@@ -1,5 +1,9 @@
 <template lang="html">
-  <cards />
+  <div class="">
+  <cards v-bind:authenticated="authenticated"/>
+  <h1 v-if="authenticated ==false">rofh</h1>
+  </div>
+
 </template>
 
 <script>
@@ -8,6 +12,14 @@ export default {
   name:'home',
   components: {
     cards
+  },
+  props: ["authenticated"],
+  data() {
+    return {
+    }
+  },
+  created() {
+    //this.authenticated = this.$route.params.authenticated;
   }
 }
 </script>
