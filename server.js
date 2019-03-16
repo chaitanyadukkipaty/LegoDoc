@@ -122,7 +122,9 @@ app.post('/',(req,res)=>{
                 date:temp.date,
                 des:temp.des,
                 upvotes:upvotes,
-                percentage:percentage
+                percentage:percentage,
+                upvoteflag:false,
+                downvoteflag:false
             });
         }
         res.send(toSend);
