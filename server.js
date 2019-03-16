@@ -7,19 +7,23 @@ var User = require('./models/user');
 var Template = require('./models/template');
 var TemplateType = require('./models/typeofd');
 var mongoose = require('mongoose');
+var path = require('path');
+var fs = require('fs');
+var morgan       = require('morgan');
+
 var multer = require('multer');
-
-// var storage = multer.diskStorage({
-// 	destination: function(req, file, callback) {
-// 		callback(null, './uploads');
-// 	},
-// 	filename: function(req, file, callback) {
-// 		callback(null, req. + path.extname(file.originalname));
-// 	}
-// })
-
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, __dirname+'/Uploads');
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now()+'.docx');
+    }
+});
+var upload = multer({storage: storage});
 const request = require('request');
 
+app.use(morgan('dev')); // log every request to the console
 app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -59,54 +63,119 @@ app.post('/login', function(req,res){
 
 //Registering a new user
 app.post('/register',function(req,res){
-    if(req.body.id && req.body.password && req.body.name){
-        var userData={
-            id :req.body.id,
+    console.log(req.body);
+
+        const userData={
+            username :req.body.username,
             name : req.body.name,
             password : req.body.password,
+            email: req.body.email
         };
         User.create(userData, function(error, user){
             if(error){
                 res.sendStatus(401);
             }
             else{
-                res.send(req.body.id);
+                res.sendStatus(200);
             }
         });
-    }
+
+    console.log(userData);
 });
 
-app.post('/fileUpload',(req,res)=>{
-    console.log(req.body)
-    var templateDate = {
+app.post('/uploadTemplate',(req,res)=>{
+    var templateData ={
+        username : req.body.username,
         name : req.body.name,
         type : req.body.type,
-        date : req.body.date,
         des : req.body.des
     };
-    Template.create(templateDate,function(error,template){
-        if(error){
-            console.log(error);
+    var temp = req.body.template;
+    var finalString = "";
+    for(var i = 0; i<temp.length; i++){
+        if(temp.charAt(i)=='~'){
+            finalString+="<span class=\"field\"><mark>";
+            for(i=i+1;i<temp.length;i++){
+                if(temp.charAt(i)=='~'){
+                    break;
+                }
+                else{
+                    finalString+=temp.charAt(i);
+                }
+            }
+            finalString+="</mark></span>";
         }
         else{
-            console.log("Success");
-            res.sendStatus(200);
+            finalString+=temp.charAt(i);
+        }
+    }
+    var fileName = String(Date.now());
+    var path_to_file = __direname + '/Uploads/'+fileName+'.txt';
+    fs.writeFile(path_to_file, finalString, (err) => {
+        if(err) {
+            return console.log(err);
         }
     });
-    // var upload = multer({
-	// 	storage: storage,
-	// 	fileFilter: function(req, file, callback) {
-	// 		var ext = path.extname(file.originalname)
-	// 		if (ext !== '.docx' && ext !== '.doc') {
-	// 			return callback(res.end('Only .docx or .doc files are allowed'), null);
-	// 		}
-	// 		callback(null, true);
-	// 	}
-	// }).single('userFile');
-	// upload(req, res, function(err) {
-	// 	res.end('File is uploaded')
-	// });
+    templateData.path_to_file = path_to_file;
+    console.log("The file was saved!");
+    Template.create(templateData)
+        .then((template)=>{
+            templateData._id=template._id;
+            User.update({username:template.id},{
+                $push:{
+                    submitted_templates :{ 
+                        name : template.name,
+                        id : template._id
+                    }
+                }
+            },function(error,success){
+                if(error){
+                    console.log(error);
+                }
+                else{
+                    console.log(success)
+                }
+            });
+        })
+        .catch((err)=>{
+            console.log(err);
+        });
+    console.log(finalString);
+    res.sendStatus(200);
 });
+
+// app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
+//     var templateData = {
+//         username : req.body.username,
+//         name : req.body.name,
+//         type : req.body.type,
+//         date : req.body.date,
+//         des : req.body.des,
+//         path_to_file : __dirname+'/Uploads/'+req.file.filename
+//     };
+//     Template.create(templateData)
+//         .then((template)=>{
+//             templateData._id=template._id;
+//             User.update({username:template.id},{
+//                 $push:{
+//                     submitted_templates :{ 
+//                         name : template.name,
+//                         id : template._id
+//                     }
+//                 }
+//             },function(error,success){
+//                 if(error){
+//                     console.log(error);
+//                 }
+//                 else{
+//                     console.log(success)
+//                 }
+//             });
+//         })
+//         .catch((err)=>{
+//             console.log(err);
+//         });
+// });
 
 //home page
 app.post('/',(req,res)=>{
