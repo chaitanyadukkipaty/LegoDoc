@@ -9,14 +9,14 @@ var TemplateType = require('./models/typeofd');
 var mongoose = require('mongoose');
 var multer = require('multer');
 
-var storage = multer.diskStorage({
-	destination: function(req, file, callback) {
-		callback(null, './uploads');
-	},
-	filename: function(req, file, callback) {
-		callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-	}
-})
+// var storage = multer.diskStorage({
+// 	destination: function(req, file, callback) {
+// 		callback(null, './uploads');
+// 	},
+// 	filename: function(req, file, callback) {
+// 		callback(null, req. + path.extname(file.originalname));
+// 	}
+// })
 
 const request = require('request');
 
@@ -86,7 +86,7 @@ app.post('/fileUpload',(req,res)=>{
     };
     Template.create(templateDate,function(error,template){
         if(error){
-            console.log(error)
+            console.log(error);
         }
         else{
             console.log("Success");
@@ -120,7 +120,7 @@ app.post('/',(req,res)=>{
                 name:temp.name,
                 type:temp.type,
                 date:temp.date,
-                des:temp.date,
+                des:temp.des,
                 upvotes:upvotes,
                 percentage:percentage
             });
