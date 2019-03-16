@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/chaitanyadukkipaty/LegoDoc#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "http": "0.0.0",
     "mongoose": "^5.4.19"
