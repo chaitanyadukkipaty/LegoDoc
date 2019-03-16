@@ -91,9 +91,9 @@ The application will now be running on https://localhost:8081/
 + 
 
 ## File Structure <a name="file_structure"></a>
-/server.js  : Main server code
-/web/ledgo  : Website code
-/models     : Data structures and methods to access them
+/server.js  : Main server code <br>
+/web/ledgo  : Website code <br>
+/models     : Data structures and methods to access them <br>
 
 ## Contributing<a name="contributing"></a>
 
