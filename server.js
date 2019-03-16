@@ -7,6 +7,7 @@ var User = require('./models/user');
 var Template = require('./models/template');
 var TemplateType = require('./models/typeofd');
 var mongoose = require('mongoose');
+var multer = require('multer');
 
 const request = require('request');
 
@@ -26,7 +27,7 @@ mongoose.connect(conString,(err) => {
 
 
  //login
- app.post('/login', function(req,res){
+app.post('/login', function(req,res){
     // Request.get()
     var query = User.where({id:req.body.id});
     query.findOne((err,user)=>{

@@ -4,7 +4,7 @@ module.exports=mongoose.model("Template",{
     name : String,
     type : String,
     date : Date,
-    description : String,
+    des : String,
     used_by : [{
         id:String
     }],
