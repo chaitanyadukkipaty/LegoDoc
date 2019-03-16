@@ -9,6 +9,7 @@ var TemplateType = require('./models/typeofd');
 var mongoose = require('mongoose');
 var path = require('path');
 var fs = require('fs');
+var morgan       = require('morgan');
 
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -22,6 +23,7 @@ var storage = multer.diskStorage({
 var upload = multer({storage: storage});
 const request = require('request');
 
+app.use(morgan('dev')); // log every request to the console
 app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
