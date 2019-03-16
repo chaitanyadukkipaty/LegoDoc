@@ -89,8 +89,21 @@ app.post('/fileUpload',upload.single('userFile'),(req,res)=>{
     Template.create(templateData)
         .then((template)=>{
             templateData._id=template._id;
-            User.update({username:template.id})
-            
+            User.update({username:template.id},{
+                $push:{
+                    submitted_templates :{ 
+                        name : template.name,
+                        id : template._id
+                    }
+                }
+            },function(error,success){
+                if(error){
+                    console.log(error);
+                }
+                else{
+                    console.log(success)
+                }
+            });
         })
         .catch((err)=>{
             console.log(err);
