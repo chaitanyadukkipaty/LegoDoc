@@ -10,18 +10,9 @@ var mongoose = require('mongoose');
 var path = require('path');
 var fs = require('promise-fs');
 var morgan       = require('morgan');
-
-var multer = require('multer');
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, __dirname+'/Uploads');
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now()+'.docx');
-    }
-});
-var upload = multer({storage: storage});
 const request = require('request');
+var phantom = require('phantom');
+
 
 app.use(morgan('dev')); // log every request to the console
 app.use(bodyParser.json()); // get information from html forms
@@ -32,8 +23,6 @@ app.use(cors());
 
 var conString = "mongodb://127.0.0.1:27017/LegoDoc";
 mongoose.Promise=Promise;
-
-var phantom = require('phantom');
 
 //Connecting to the database
 mongoose.connect(conString,(err) => {
@@ -85,6 +74,16 @@ app.post('/register',function(req,res){
     console.log(userData);
 });
 
+app.get('/printPDF/:f',(req,res)=>{
+    var fileName = req.params.f;
+    var file = fs.createReadStream(fileName+".pdf");
+    var stat = fs.statSync("./"+fileName+".pdf");
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=Output.pdf');
+    file.pipe(res);
+});
+
 app.post('/printPDF',(req,res)=>{
     var finalHTML = "<html><body>"+req.body.htmldata+"</body></html>";
     // console.log(finalHTML);
@@ -101,15 +100,9 @@ app.post('/printPDF',(req,res)=>{
                     .then(function() {
                         console.log('Page Rendered');
                         ph.exit();
-                    })
+                    });
                     .then(()=>{
-                        console.log("okay");
-                        var file = fs.createReadStream(fileName+".pdf");
-                        var stat = fs.statSync("./"+fileName+".pdf");
-                        res.setHeader('Content-Length', stat.size);
-                        res.setHeader('Content-Type', 'application/pdf');
-                        res.setHeader('Content-Disposition', 'attachment; filename=Output.pdf');
-                        file.pipe(res);
+                        res.send(fileName+".pdf");
                     });
                 });
             });
