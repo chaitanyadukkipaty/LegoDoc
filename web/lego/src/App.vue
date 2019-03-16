@@ -5,7 +5,7 @@
     </head>
     <v-app id="inspire">
       <v-toolbar dark color="primary">
-        <v-toolbar-title class="white--text">CSI Management System</v-toolbar-title>
+        <v-toolbar-title class="white--text">Lego Doc</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
           <v-btn flat to="/home" v-if="authenticated == false">Home</v-btn>
