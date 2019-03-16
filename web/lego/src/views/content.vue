@@ -1,16 +1,14 @@
 <template lang="html">
-  <h1>{{tid}}</h1>
+  <h1>{{this.tid}}</h1>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-  name: 'content',
   tid: '',
   created() {
          this.tid = this.$route.params.tid;
-         axios.post('http://<roshans IP>:8081/login', {
-            id,
-            password
+         axios.post('http://10.0.0.1:8081/login', {
           })
             .then((res) => {
               console.log(res.data);

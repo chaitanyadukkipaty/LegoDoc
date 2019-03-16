@@ -5,7 +5,7 @@
     </head>
     <v-app id="inspire">
       <v-toolbar dark color="primary">
-        <v-toolbar-title class="white--text">CSI Management System</v-toolbar-title>
+        <v-toolbar-title class="white--text">Lego Doc</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
           <v-btn flat to="/home" v-if="authenticated == false">Home</v-btn>
@@ -16,7 +16,7 @@
           <v-btn flat v-if="authenticated" to="/" v-on:click.native="logout()" replace>Logout</v-btn> -->
         </v-toolbar-items>
       </v-toolbar>
-      <router-view @authenticated="setAuthenticated" />
+      <router-view v-bind:authenticated="authenticated" @authenticated="setAuthenticated" />
     </v-app>
   </div>
 </template>

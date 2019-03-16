@@ -74,16 +74,12 @@ import axios from 'axios';
           const id=this.id;
           const password=this.password;
           //this.$router.app.$emit("authenticated",true);
-          axios.post('http://206.189.135.147:8081/login', {
+          axios.post('http://10.42.0.61:8081/login', {
             id,
             password
           })
             .then((res) => {
-              console.log(res.data.role);
-              if(res.data.role == "technical head"){
-                this.$emit("authenticated",true);
-                this.$router.replace({ name: 'DashMembers', params: { id: this.id } });
-              }
+              console.log(res.data);
             })
             .catch();
         }
