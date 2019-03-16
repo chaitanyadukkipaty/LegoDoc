@@ -33,7 +33,7 @@ app.use(cors());
 var conString = "mongodb://127.0.0.1:27017/LegoDoc";
 mongoose.Promise=Promise;
 
-
+var phantom = require('phantom');   
 
 //Connecting to the database
 mongoose.connect(conString,(err) => {
@@ -83,6 +83,42 @@ app.post('/register',function(req,res){
         });
 
     console.log(userData);
+});
+
+app.post('/printPDF',(req,res)=>{
+    var finalHTML = "<html><body>"+req.body.htmldata+"</body></html>";
+    // console.log(finalHTML);
+    fileName = String(Date.now());
+    var path_to_file = __dirname + '/Submissions/'+fileName+".html";
+    fs.writeFile(path_to_file,finalHTML)
+    .then(()=>{
+        phantom.create()
+        .then(function(ph) {
+            ph.createPage().then(function(page) {
+                page.open(path_to_file)
+                .then(function(status) {
+                    page.render(fileName+'.pdf')
+                    .then(function() {
+                        console.log('Page Rendered');
+                        ph.exit();
+                    })
+                    .then(()=>{
+                        console.log("okay");
+                        var file = fs.createReadStream(fileName+".pdf");
+                        var stat = fs.statSync("./"+fileName+".pdf");
+                        res.setHeader('Content-Length', stat.size);
+                        res.setHeader('Content-Type', 'application/pdf');
+                        res.setHeader('Content-Disposition', 'attachment; filename=Output.pdf');
+                        file.pipe(res);
+                    });
+                });
+            });
+        });
+        console.log("done");
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
 });
 
 app.post('/viewTemplate', (req,res)=>{
