@@ -1,4 +1,4 @@
-var express  = require('express');
+var express = require('express');
 var app      = express();
 var http = require("http").Server(app);
 var port     = process.env.PORT || 8081;
@@ -7,6 +7,8 @@ var User = require('./models/user');
 var Template = require('./models/template');
 var TemplateType = require('./models/typeofd');
 var mongoose = require('mongoose');
+
+const request = require('request');
 
 app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -72,6 +74,59 @@ app.get('/',(req,res)=>{
     });
 });
 
+app.post('/recaptchaCheckbox', (req, res) => {
+    if (
+        req.body.captcha === undefined ||
+        req.body.captcha === '' ||
+        req.body.captcha === null
+    ) {
+        return res.sendStatus(400);
+    }
+
+    // Secret Key
+    const secretKey = process.env.secretKey;
+
+    // Verify URL
+    const verifyUrl = `https://google.com/recaptcha/api/siteverify?secret=${secretKeyCheckbox}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
+
+    // Make request to verifyUrl
+    request(verifyUrl, (err, response, body) => {
+        body = JSON.parse(body);
+
+        // If not successful
+        if (body.success !== undefined && !body.success) {
+            return res.sendStatus(400);
+        };
+    });
+
+});
+
+app.post('/recaptchaInvisible', (req, res) => {
+    if (
+        req.body.captcha === undefined ||
+        req.body.captcha === '' ||
+        req.body.captcha === null
+    ) {
+        return res.sendStatus(400);
+    }
+
+    // Secret Key
+    const secretKey = process.env.secretKey;
+
+    // Verify URL
+    const verifyUrl = `https://google.com/recaptcha/api/siteverify?secret=${secretKeyInvisible}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
+
+    // Make request to verifyUrl
+    request(verifyUrl, (err, response, body) => {
+        body = JSON.parse(body);
+
+        // If not successful
+        if (body.success !== undefined && !body.success) {
+            return res.sendStatus(400);
+        };
+    });
+
+});
 //creating a server
 var server = http.listen(8081, () => {
     console.log("Well done, now I am listening on ", server.address().port)
