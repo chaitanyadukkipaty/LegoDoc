@@ -76,8 +76,8 @@ app.post('/register',function(req,res){
 
 app.get('/printPDF/:f',(req,res)=>{
     var fileName = req.params.f;
-    var file = fs.createReadStream(fileName+".pdf");
-    var stat = fs.statSync("./"+fileName+".pdf");
+    var file = fs.createReadStream(fileName);
+    var stat = fs.statSync("./"+fileName);
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=Output.pdf');
@@ -94,13 +94,14 @@ app.post('/printPDF',(req,res)=>{
         phantom.create()
         .then(function(ph) {
             ph.createPage().then(function(page) {
+                page.property('paperSize',{width:595,height:842});
                 page.open(path_to_file)
                 .then(function(status) {
                     page.render(fileName+'.pdf')
                     .then(function() {
                         console.log('Page Rendered');
                         ph.exit();
-                    });
+                    })
                     .then(()=>{
                         res.send(fileName+".pdf");
                     });
@@ -132,7 +133,7 @@ app.post('/viewTemplate', (req,res)=>{
 
          fs.readFile(template.path_to_file,{encoding:"utf-8"})
             .then((data)=>{
-                console.log(typeof(data));
+                // console.log(typeof(data));
                 templateFinal.username = template.username;
                 templateFinal.name = template.name;
                 templateFinal.type = template.type;
@@ -143,7 +144,7 @@ app.post('/viewTemplate', (req,res)=>{
                 return templateFinal
             })
             .then((temp)=>{
-                console.log(temp);
+                // console.log(temp);
                 res.send(temp);
             })
             .catch((err)=>{
@@ -182,7 +183,8 @@ app.post('/uploadTemplate',(req,res)=>{
             finalString+=temp.charAt(i);
         }
     }
-    var fileName = String(Date.now());
+    var date = Date.now()
+    var fileName = String(date);
     var path_to_file = __dirname + '/Uploads/'+fileName+'.txt';
     fs.writeFile(path_to_file, finalString, (err) => {
         if(err) {
@@ -190,6 +192,7 @@ app.post('/uploadTemplate',(req,res)=>{
         }
     });
     templateData.path_to_file = path_to_file;
+    templateData.date = date.toISOString;
     console.log("The file was saved!");
     Template.create(templateData)
         .then((template)=>{
@@ -210,11 +213,18 @@ app.post('/uploadTemplate',(req,res)=>{
                     console.log(success)
                 }
             });
+            TemplateType.update({name:templateData.type},{
+                $push:{
+                    existing_templates:{
+                        tid:template._id
+                    }
+                }
+            });
         })
         .catch((err)=>{
             console.log(err);
         });
-    console.log(finalString);
+    // console.log(finalString);
     // res.sendStatus(200);
 });
 
