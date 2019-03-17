@@ -12,6 +12,7 @@ var fs = require('promise-fs');
 var morgan       = require('morgan');
 const request = require('request');
 var phantom = require('phantom');
+var htmlDocx = require('html-docx-js');
 
 
 app.use(morgan('dev')); // log every request to the console
@@ -76,12 +77,30 @@ app.post('/register',function(req,res){
 
 app.get('/printPDF/:f',(req,res)=>{
     var fileName = req.params.f;
-    var file = fs.createReadStream(fileName+".pdf");
-    var stat = fs.statSync("./"+fileName+".pdf");
+    var file = fs.createReadStream(fileName);
+    var stat = fs.statSync("./"+fileName);
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=Output.pdf');
     file.pipe(res);
+});
+
+app.post('/printDocX',(req,res)=>{
+    var finalHTML = "<html><body>"+req.body.htmldata+"</body></html>";
+    // console.log(finalHTML);
+    fileName = String(Date.now());
+    var path_to_file = __dirname + '/Submissions/'+fileName+".html";
+    fs.writeFile(path_to_file, finalHTML)
+    .then(()=>{
+        var converted = htmlDocx.asBlob(finalHTML);
+        saveAs(converted, fileName+'.docx');
+    })
+    .then(()=>{
+        console.log('done');
+    })
+    .catch((err)=>{
+        console.log(err)
+    });
 });
 
 app.post('/printPDF',(req,res)=>{
@@ -94,13 +113,18 @@ app.post('/printPDF',(req,res)=>{
         phantom.create()
         .then(function(ph) {
             ph.createPage().then(function(page) {
-                page.open(path_to_file)
+                page.property('paperSize',{
+                    format : "A4",
+                    orientation : "potrait",
+                    margin : '1cm'
+                });
+                page.open(path_to_file,{charset:'UTF-8'})
                 .then(function(status) {
                     page.render(fileName+'.pdf')
                     .then(function() {
                         console.log('Page Rendered');
                         ph.exit();
-                    });
+                    })
                     .then(()=>{
                         res.send(fileName+".pdf");
                     });
@@ -132,7 +156,7 @@ app.post('/viewTemplate', (req,res)=>{
 
          fs.readFile(template.path_to_file,{encoding:"utf-8"})
             .then((data)=>{
-                console.log(typeof(data));
+                // console.log(typeof(data));
                 templateFinal.username = template.username;
                 templateFinal.name = template.name;
                 templateFinal.type = template.type;
@@ -143,7 +167,7 @@ app.post('/viewTemplate', (req,res)=>{
                 return templateFinal
             })
             .then((temp)=>{
-                console.log(temp);
+                // console.log(temp);
                 res.send(temp);
             })
             .catch((err)=>{
@@ -161,7 +185,8 @@ app.post('/uploadTemplate',(req,res)=>{
         username : req.body.username,
         name : req.body.name,
         type : req.body.type,
-        des : req.body.des
+        des : req.body.des,
+        date : ""
     };
     var temp = req.body.template;
     var finalString = "";
@@ -182,7 +207,8 @@ app.post('/uploadTemplate',(req,res)=>{
             finalString+=temp.charAt(i);
         }
     }
-    var fileName = String(Date.now());
+    var date = Date.now()
+    var fileName = String(date);
     var path_to_file = __dirname + '/Uploads/'+fileName+'.txt';
     fs.writeFile(path_to_file, finalString, (err) => {
         if(err) {
@@ -190,6 +216,7 @@ app.post('/uploadTemplate',(req,res)=>{
         }
     });
     templateData.path_to_file = path_to_file;
+    templateData.date = date.toISOString;
     console.log("The file was saved!");
     Template.create(templateData)
         .then((template)=>{
@@ -210,11 +237,18 @@ app.post('/uploadTemplate',(req,res)=>{
                     console.log(success)
                 }
             });
+            TemplateType.update({name:templateData.type},{
+                $push:{
+                    existing_templates:{
+                        tid:template._id
+                    }
+                }
+            });
         })
         .catch((err)=>{
             console.log(err);
         });
-    console.log(finalString);
+    // console.log(finalString);
     // res.sendStatus(200);
 });
 
