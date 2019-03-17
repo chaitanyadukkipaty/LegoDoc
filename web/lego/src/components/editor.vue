@@ -8,56 +8,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-  
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
-  
+
   <body>
-  
+
     <div class="toolbar">
-  
-      <button class="tool-items fa fa-underline"  onclick="document.execCommand('underline', false, '');">
+
+      <button onclick="document.execCommand('underline', false, '');">
+        <v-icon >format_underlined</v-icon>
       </button>
-  
-      <button class="tool-items fa fa-italic" onclick="document.execCommand('italic', false, '');">
+
+      <button onclick="document.execCommand('italic', false, '');">
+        <v-icon >format_italic</v-icon>
       </button>
-  
-  
-      <button class="tool-items fa fa-bold" onclick="document.execCommand('bold', false, '');">
+
+
+      <button onclick="document.execCommand('bold', false, '');">
+        <v-icon >format_bold</v-icon>
       </button>
-  
-      <button class="tool-items fa fa-scissors" onclick="document.execCommand('cut',false,'')"></button>
-  
-      <button class="tool-items fa fa-undo" onclick="document.execCommand('undo',false,'')"></button>
-  
-      <button class="tool-items fa fa-repeat" onclick="document.execCommand('redo',false,'')"></button>
-  
-      <button class="tool-items fa fa-strikethrough" onclick="document.execCommand('strikeThrough',false,'')"></button>
-  
-      <button class="tool-items fa fa-trash" onclick="document.execCommand('delete',false,'')"></button>
-  
-      <button class="tool-items fa fa-scribd" onclick="document.execCommand('selectAll',false,'')"></button>
-  
+
+
+      <button  onclick="document.execCommand('cut',false,'')"><v-icon>not_interested</v-icon></button>
+
+      <button  onclick="document.execCommand('undo',false,'')"><v-icon >undo</v-icon></button>
+
+      <button onclick="document.execCommand('redo',false,'')"><v-icon >redo</v-icon></button>
+
+      <button onclick="document.execCommand('strikeThrough',false,'')"><v-icon >format_strikethrough</v-icon></button>
+
+      <button onclick="document.execCommand('delete',false,'')"><v-icon>backspace</v-icon></button>
+
+      <button onclick="document.execCommand('selectAll',false,'')"><v-icon>select_all</v-icon></button>
+
       <!-- Jutify -->
-  
-      <button class="tool-items fa fa-align-center" onclick="document.execCommand('justifyCenter',false,'')"></button>
-      <button class="tool-items fa fa-align-left" onclick="document.execCommand('justifyLeft',false,'')"></button>
-      <button class="tool-items fa fa-align-right" onclick="document.execCommand('justifyRight',false,'')"></button>
+
+      <button   onclick="document.execCommand('justifyCenter',false,'')"><v-icon>format_align_center</v-icon></button>
+      <button onclick="document.execCommand('justifyLeft',false,'')"><v-icon>format_align_left</v-icon></button>
+      <button  onclick="document.execCommand('justifyRight',false,'')"><v-icon>format_align_right</v-icon></button>
     </div>
-  
+
     <div class="center">
       <div id="abc" class="editor" contenteditable>
         <p>Start typing</p>
       </div>
     </div>
-  
 
-  
+
+
   </body>
-  
-  
+
+
   </html>
-  
+
 </template>
 
 <script>
@@ -83,7 +87,6 @@ html{
 .toolbar{
     display:grid;
     grid-template-columns: repeat(auto-fit,minmax(20px,40px));
-    background-color: rgb(231, 231, 231);
     color: rgb(0, 0, 0);
     grid-gap: 1rem;
     padding: 1rem;

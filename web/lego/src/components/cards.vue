@@ -1,24 +1,47 @@
 <template lang="html">
   <div id="app">
     <v-app id="inspire">
-      <v-container fluid grid-list-xl style="background: #E3F2FD">
-        <v-layout row wrap justify-center>
+      <v-container fluid grid-list-xl style="background: #e3f2fd">
+        <v-container fluid>
+          <v-layout row>
+            <v-flex xs6>
+              <v-combobox
+                v-model="fieldselect"
+                label="Select your field"
+                v-on:change="changeField()"
+                :items="fields"
+              ></v-combobox>
+            </v-flex>
+        <v-flex xs6>
+          <v-combobox
+            v-model="name"
+            :items="array1"
+            label="Search for your template"
+            item-text="name"
+            single-line
+            return-object
+            v-on:change="changeArray()"
+          ></v-combobox>
+        </v-flex>
+
+      </v-layout>
+    </v-container>
+        <v-layout row wrap>
           <v-flex
             xs12
             md6
             lg4
-            v-for="n in array"
+            v-for="n in array1"
             :key="n._id"
           >
             <v-card
               class="mx-auto"
-              color="#17435D"
+              color="#1565c0"
               dark
               max-width="400"
               min-height="200"
             >
               <v-card-title @click="myfun(n)">
-                <v-icon v-if="authenticated" left>edit</v-icon>
                 <span class="headline font-condensed">{{n.name}}</span>
               </v-card-title>
 
@@ -66,7 +89,7 @@
 
 
             <v-spacer></v-spacer>
-            <v-btn flat><v-icon right>share</v-icon></v-btn>
+            <h4 class="font-weight-light">{{n.type}}</h4><pre> | </pre><h4 class="font-weight-light">{{n.username}}</h4>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -87,27 +110,56 @@ export default {
       myname: 'caldem',
       iconID: 'myID',
       iconID2: 'myID2',
+      name: '',
+      fieldselect: '',
+      fields: [
+        'Freelancer',
+        'Software',
+        'Writers',
+        'Photography',
+        'Wills',
+        'Real Estate',
+        'Personal',
+        'Designer',
+        'Sales & Purchase',
+        'MBA'
+      ],
       array: [
-        {
-          tid: "1",
-          name: "Some random title",
-          type: "something",
-          des: "Some random Description",
-          upvotes: 100,
-          percentage: 60
-        },
-        {
-          tid: "2",
-          name: "Some other random title",
-          type: "something",
-          des: "Some other random Description",
-          upvotes: 50,
-          percentage: 69
-        },
+      ],
+      array1: [
+
       ],
     }
   },
   methods: {
+    changeArray() {
+      this.myFunction();
+    },
+    changeField() {
+      this.myFunction();
+    },
+    myFunction() {
+      if(this.fieldselect){
+        var temp = this.array.filter((elm) => {
+          if(elm.type == this.fieldselect){
+            return elm;
+          }
+        });
+        this.array1 = temp;
+        if(this.name.name != null){
+          var temp = this.array1.filter((elm) => {
+              if(elm.name == this.name.name){
+                return elm;
+              }
+            });
+            this.array1 = temp;
+        }
+      }
+      else{
+        this.array1 = this.array;
+        this.name.name = '';
+      }
+    },
     myfun(n) {
       if(this.authenticated == true){
         this.$router.replace({ name: 'TemplateContent', params: { _id: n._id} });
@@ -146,11 +198,12 @@ export default {
   },
   created() {
     //this.tid = this.$route.params.tid;
-    axios.post('http://192.168.0.104:8081/', {
+    axios.post('http://192.168.43.229:8081/', {
      })
        .then((res) => {
          console.log(res.data);
          this.array = res.data;
+         this.array1 = res.data;
        })
        .catch();
   }

@@ -92,7 +92,7 @@ export default {
           const val = {username,name,email,password}
           console.log(typeof(val))
           //this.$router.app.$emit("authenticated",true);
-          axios.post('http://192.168.0.104:8081/register', {
+          axios.post('http://192.168.43.229/register', {
             username,
             name,
             email,
