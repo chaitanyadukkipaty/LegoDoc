@@ -80,6 +80,7 @@ import axios from 'axios';
           })
             .then((res) => {
               this.$emit("authenticated",true);
+              this.$emit("username",this.id);
               this.$router.replace({ name: 'Home', params: { id: this.id } });
             })
             .catch();

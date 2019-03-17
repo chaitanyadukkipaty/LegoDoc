@@ -5,22 +5,24 @@
 
     </head>
     <v-app id="inspire">
-      <v-toolbar dark color="primary">
+      <v-toolbar dark color="#0356B3">
         <v-toolbar-title class="white--text">Lego Doc</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
-          <v-btn flat to="/home" v-if="authenticated == false">Home</v-btn>
-          <v-btn flat to="/home" v-if="authenticated">Home</v-btn>
-          <v-btn flat to="/upload" v-if="authenticated">Upload</v-btn>
-          <v-btn flat to="/login" v-if="authenticated == false">Login</v-btn>
-          <v-btn flat to="/register" v-if="authenticated == false">Register</v-btn>
-          <v-btn flat v-if="authenticated" to="/" v-on:click.native="logout()" replace>Logout</v-btn>
+          <v-btn flat to="/home" v-if="authenticated == false" class="font-weight-regular">Home</v-btn>
+          <v-btn flat to="/home" v-if="authenticated" class="font-weight-regular">Home</v-btn>
+          <v-btn flat to="/upload" v-if="authenticated" class="font-weight-regular">Upload</v-btn>
+          <v-btn flat to="/login" v-if="authenticated == false" class="font-weight-regular">Login</v-btn>
+          <v-btn flat to="/register" v-if="authenticated == false" class="font-weight-regular">Register</v-btn>
+          <v-btn flat v-if="authenticated" to="/" v-on:click.native="logout()" replace class="font-weight-regular">Logout</v-btn>
           <!-- <v-btn flat v-if="authenticated" to="/dashMembers" replace>Members</v-btn>
           <v-btn flat v-if="authenticated" to="/dashAdd" replace>Add Member</v-btn>
           <v-btn flat v-if="authenticated" to="/" v-on:click.native="logout()" replace>Logout</v-btn> -->
         </v-toolbar-items>
       </v-toolbar>
-      <router-view v-bind:authenticated="authenticated" @authenticated="setAuthenticated" />
+      <router-view v-bind:authenticated="authenticated" @authenticated="setAuthenticated"
+                    v-bind:username="username" @username="setUsername"
+       />
     </v-app>
   </div>
 </template>
@@ -30,7 +32,8 @@ export default {
   name: 'app',
   data() {
     return {
-      authenticated: false
+      authenticated: false,
+      username: '1234'
     }
   },
   mounted() {
@@ -42,6 +45,9 @@ export default {
       setAuthenticated(status) {
           this.authenticated = status;
       },
+      setUsername(username) {
+          this.username = username;
+      },
       logout() {
           this.authenticated = false;
       }
@@ -52,6 +58,6 @@ export default {
 
 <style>
 #app {
-
+background: #BBDEFB;
 }
 </style>

@@ -45,6 +45,7 @@ export default {
   components: {
     editor
   },
+  props: ["username"],
   data() {
     return {
       valid: false,
@@ -52,9 +53,16 @@ export default {
       des: '',
       typeSelect: '',
       typeList: [
-          'Chaitanya will give 1',
-          'Chaitanya will give 2',
-          'Chaitanya will give 3',
+          'Freelancer',
+          'Software',
+          'Writers',
+          'Photography',
+          'Wills',
+          'Real Estate',
+          'Personal',
+          'Designer',
+          'Sales & Purchase',
+          'MBA'
         ]
     }
   },
@@ -64,8 +72,8 @@ export default {
     //  var content = document.querySelector(".getcontent");
       var editorContent = document.querySelector(".editor");
       var s = editorContent.innerHTML;
-      console.log(this.name + this.des + this.typeSelect + s);
-      const username = "1234";
+      console.log(this.username);
+      const username = this.username;
       const name = this.name;
       const des = this.des;
       const type = this.typeSelect;

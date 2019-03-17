@@ -1,8 +1,8 @@
 <template lang="html">
   <div id="app">
     <v-app id="inspire">
-      <v-container fluid grid-list-xl>
-        <v-layout row wrap>
+      <v-container fluid grid-list-xl style="background: #E3F2FD">
+        <v-layout row wrap justify-center>
           <v-flex
             xs12
             md6
@@ -12,16 +12,17 @@
           >
             <v-card
               class="mx-auto"
-              color="#26c6da"
+              color="#17435D"
               dark
               max-width="400"
-
+              min-height="200"
             >
               <v-card-title @click="myfun(n)">
-                <span class="headline font-weight-bold">{{n.name}}</span>
+                <v-icon v-if="authenticated" left>edit</v-icon>
+                <span class="headline font-condensed">{{n.name}}</span>
               </v-card-title>
 
-              <v-card-text class="title">
+              <v-card-text class="title font-condensed font-weight-light">
                 {{n.des}}
               </v-card-text>
 
@@ -36,25 +37,25 @@
                     <v-btn  v-if="n.upvoteflag == true" @click="upvote(n)" flat icon
                      :id="iconID"
                      slot="activator">
-                     <v-icon class="mr-1" large left>keyboard_arrow_up</v-icon>
+                     <v-icon class="mr-1"  left>arrow_upward</v-icon>
                     </v-btn>
 
                     <v-btn v-if="n.upvoteflag == false" @click="upvote(n)" flat icon
                      slot="activator">
-                     <v-icon  class="mr-1" large left>keyboard_arrow_up</v-icon>
+                     <v-icon  class="mr-1"  left>arrow_upward</v-icon>
                     </v-btn>
 
                     <span class="subheading mr-2">{{n.upvotes}}</span>
 
                     <v-btn v-if="n.downvoteflag == true" @click="downvote(n)" flat icon
-                     :id="iconID"
+                     :id="iconID2"
                      slot="activator">
-                     <v-icon  class="mr-1 myclass" large>keyboard_arrow_down</v-icon>
+                     <v-icon  class="mr-1 myclass" >arrow_downward</v-icon>
                     </v-btn>
 
                     <v-btn v-if="n.downvoteflag == false" @click="downvote(n)" flat icon
                      slot="activator">
-                     <v-icon class="mr-1 myclass" large>keyboard_arrow_down</v-icon>
+                     <v-icon class="mr-1 myclass" >arrow_downward</v-icon>
                     </v-btn>
 
                     <!-- <v-icon class="mr-1" large right>share</v-icon> -->
@@ -62,6 +63,10 @@
                   </v-flex>
                   </v-layout>
                 </v-list-tile>
+
+
+            <v-spacer></v-spacer>
+            <v-btn flat><v-icon right>share</v-icon></v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -78,8 +83,10 @@ export default {
   props: ["authenticated"],
   data() {
     return {
+      show: false,
       myname: 'caldem',
       iconID: 'myID',
+      iconID2: 'myID2',
       array: [
         {
           tid: "1",
@@ -120,12 +127,20 @@ export default {
         n.upvoteflag = true;
         n.downvoteflag = false;
       }
+      else{
+        n.upvotes = n.upvotes - 1;
+        n.upvoteflag = false;
+      }
     },
     downvote(n){
       if(n.downvoteflag == false){
       n.upvotes = n.upvotes - 1;
       n.upvoteflag = false;
       n.downvoteflag = true;
+      }
+      else{
+        n.upvotes = n.upvotes + 1;
+        n.downvoteflag = false;
       }
     }
   },
@@ -143,7 +158,21 @@ export default {
 </script>
 
 <style lang="css" scoped>
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
 #myID {
-  color: red;
+  color: #FF4500;
+}
+#myID2 {
+  color: #1e88e5;
+}
+#cardtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+font-weight: 800;
+line-height: 1 !important;
+letter-spacing: .02em !important;
+}
+#app{
+  background: #BBDEFB
 }
 </style>

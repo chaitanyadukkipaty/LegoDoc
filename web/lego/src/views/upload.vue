@@ -1,5 +1,5 @@
 <template lang="html">
-  <textinput />
+  <textinput v-bind:username="username" />
 </template>
 
 <script>
@@ -8,7 +8,8 @@ export default {
   name: 'upload',
   components: {
     textinput
-  }
+  },
+  props: ["username"]
 }
 </script>
 

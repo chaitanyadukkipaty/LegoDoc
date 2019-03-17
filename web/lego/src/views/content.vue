@@ -3,14 +3,16 @@
     <v-app id="inspire">
       <v-container fluid grid-list-xl>
           <v-card>
-            <v-card-title class="headline  text-lg-left blue--text">{{this.title}}</v-card-title>
-
+            <v-card-title class="headline"  text-lg-left style="color:#0356B3;">{{this.title}}</v-card-title>
             <v-card-text class="text-lg-left">
-              <h3>Type: {{this.type}}<br />
-              Description: {{this.des}}<br />
-              Data: {{this.date}}<br />
-              Username: {{this.username}}<br />
-            </h3>
+              <h6 class="headline" style="display: inline-block;">Username: </h6>
+              <h5 class="headline" style="color:#0356B3; display: inline-block;">{{this.username}}</h5><br />
+              <h6 class="headline" style="display: inline-block;">Type: </h6>
+              <h5 class="headline" style="color:#0356B3; display: inline-block;">{{this.type}}</h5><br />
+              <h6 class="headline" style="display: inline-block;">Date: </h6>
+              <h5 class="headline" style="color:#0356B3; display: inline-block;">{{this.date}}</h5><br />
+              <br />
+            </h6>
             </v-card-text>
             <editor/>
             <v-btn @click="clickme" class="sai" block color="primary" dark>Block Button</v-btn>
@@ -45,16 +47,26 @@ export default {
   methods: {
     clickme() {
       var editorContent = document.querySelector(".editor");
-      //var s = editorContent.innerHTML;
-      const old = editorContent.textContent;
-      console.log(old);
-      const body = document.body;
-      let s = body.innerHTML;
-      body.textContent = editorContent.textContent;
-      document.execCommandShowHelp;
-      body.style.whiteSpace = "pre";
-      window.print();
-      location.reload();
+      const htmldata = editorContent.innerHTML;
+      axios.post('http://192.168.0.104:8081/printPDF', {
+        htmldata
+      })
+        .then((res) => {
+          const filename = res.data
+          axios({
+            url: 'http://192.168.0.104:8081/printPDF/'+filename,
+            method: 'GET',
+            responseType: 'blob', // important
+          }).then((response) => {
+             const url = window.URL.createObjectURL(new Blob([response.data]));
+             const link = document.createElement('a');
+             link.href = url;
+             link.setAttribute('download', 'file.pdf'); //or any other extension
+             document.body.appendChild(link);
+             link.click();
+          });
+        })
+        .catch()
     }
   },
   created() {
