@@ -13,7 +13,7 @@
 
 ---
 
-<p align="center">Open source platform for sharing legal documents.</p>
+<p align="center">Open source platform for sharing legal document templates.</p>
 
 # Table of Content
 + [About](#description)
