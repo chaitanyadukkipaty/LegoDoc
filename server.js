@@ -185,7 +185,8 @@ app.post('/uploadTemplate',(req,res)=>{
         username : req.body.username,
         name : req.body.name,
         type : req.body.type,
-        des : req.body.des
+        des : req.body.des,
+        date : ""
     };
     var temp = req.body.template;
     var finalString = "";

@@ -20,5 +20,9 @@ module.exports=mongoose.model("Template",{
     comment :[{
         com : String,
         id : String
-    }]
+    }],
+    views : {
+        type : Number,
+        default : 1
+    }
 });
