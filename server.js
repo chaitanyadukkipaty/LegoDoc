@@ -10,18 +10,9 @@ var mongoose = require('mongoose');
 var path = require('path');
 var fs = require('promise-fs');
 var morgan       = require('morgan');
-
-var multer = require('multer');
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, __dirname+'/Uploads');
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now()+'.docx');
-    }
-});
-var upload = multer({storage: storage});
 const request = require('request');
+var phantom = require('phantom');
+
 
 app.use(morgan('dev')); // log every request to the console
 app.use(bodyParser.json()); // get information from html forms
@@ -33,8 +24,6 @@ app.use(cors());
 var conString = "mongodb://127.0.0.1:27017/LegoDoc";
 mongoose.Promise=Promise;
 
-
-
 //Connecting to the database
 mongoose.connect(conString,(err) => {
     console.log("Database connection", err);
@@ -44,7 +33,7 @@ mongoose.connect(conString,(err) => {
  //login
 app.post('/login', function(req,res){
     // Request.get()
-    var query = User.where({id:req.body.id});
+    var query = User.where({username:req.body.username});
     query.findOne((err,user)=>{
         if(err){
             return err;
@@ -54,7 +43,7 @@ app.post('/login', function(req,res){
         }
         else{
             if(req.body.password==user.password){
-                res.send(req.body.id);
+                res.send(req.body.username);
             }
             else{
                 res.sendStatus(500);
@@ -85,6 +74,46 @@ app.post('/register',function(req,res){
     console.log(userData);
 });
 
+app.get('/printPDF/:f',(req,res)=>{
+    var fileName = req.params.f;
+    var file = fs.createReadStream(fileName+".pdf");
+    var stat = fs.statSync("./"+fileName+".pdf");
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=Output.pdf');
+    file.pipe(res);
+});
+
+app.post('/printPDF',(req,res)=>{
+    var finalHTML = "<html><body>"+req.body.htmldata+"</body></html>";
+    // console.log(finalHTML);
+    fileName = String(Date.now());
+    var path_to_file = __dirname + '/Submissions/'+fileName+".html";
+    fs.writeFile(path_to_file,finalHTML)
+    .then(()=>{
+        phantom.create()
+        .then(function(ph) {
+            ph.createPage().then(function(page) {
+                page.open(path_to_file)
+                .then(function(status) {
+                    page.render(fileName+'.pdf')
+                    .then(function() {
+                        console.log('Page Rendered');
+                        ph.exit();
+                    });
+                    .then(()=>{
+                        res.send(fileName+".pdf");
+                    });
+                });
+            });
+        });
+        console.log("done");
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
+});
+
 app.post('/viewTemplate', (req,res)=>{
     var tid = req.body._id;
     var templateFinal={
@@ -100,7 +129,7 @@ app.post('/viewTemplate', (req,res)=>{
 
     Template.findById(tid)
     .then((template)=>{
-        
+
          fs.readFile(template.path_to_file,{encoding:"utf-8"})
             .then((data)=>{
                 console.log(typeof(data));
@@ -120,7 +149,7 @@ app.post('/viewTemplate', (req,res)=>{
             .catch((err)=>{
                 console.log(err);
             })
-        
+
     })
     .catch((err)=>{
         console.log(err)
@@ -168,7 +197,7 @@ app.post('/uploadTemplate',(req,res)=>{
             templateData._id=template._id;
             User.update({username:template.id},{
                 $push:{
-                    submitted_templates :{ 
+                    submitted_templates :{
                         name : template.name,
                         id : template._id
                     }
@@ -200,6 +229,7 @@ app.post('/',(req,res)=>{
             var upvotes = temp.upvotes-temp.downvotes;
             var percentage = upvotes*100/(temp.upvotes+temp.downvotes);
             toSend.push({
+                _id:temp._id,
                 name:temp.name,
                 type:temp.type,
                 date:temp.date,
