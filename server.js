@@ -12,6 +12,7 @@ var fs = require('promise-fs');
 var morgan       = require('morgan');
 const request = require('request');
 var phantom = require('phantom');
+var htmlDocx = require('html-docx-js');
 
 
 app.use(morgan('dev')); // log every request to the console
@@ -84,6 +85,24 @@ app.get('/printPDF/:f',(req,res)=>{
     file.pipe(res);
 });
 
+app.post('/printDocX',(req,res)=>{
+    var finalHTML = "<html><body>"+req.body.htmldata+"</body></html>";
+    // console.log(finalHTML);
+    fileName = String(Date.now());
+    var path_to_file = __dirname + '/Submissions/'+fileName+".html";
+    fs.writeFile(path_to_file, finalHTML)
+    .then(()=>{
+        var converted = htmlDocx.asBlob(finalHTML);
+        saveAs(converted, fileName+'.docx');
+    })
+    .then(()=>{
+        console.log('done');
+    })
+    .catch((err)=>{
+        console.log(err)
+    });
+});
+
 app.post('/printPDF',(req,res)=>{
     var finalHTML = "<html><body>"+req.body.htmldata+"</body></html>";
     // console.log(finalHTML);
@@ -94,8 +113,12 @@ app.post('/printPDF',(req,res)=>{
         phantom.create()
         .then(function(ph) {
             ph.createPage().then(function(page) {
-                page.property('paperSize',{width:595,height:842});
-                page.open(path_to_file)
+                page.property('paperSize',{
+                    format : "A4",
+                    orientation : "potrait",
+                    margin : '1cm'
+                });
+                page.open(path_to_file,{charset:'UTF-8'})
                 .then(function(status) {
                     page.render(fileName+'.pdf')
                     .then(function() {
