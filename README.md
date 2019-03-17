@@ -62,6 +62,7 @@ Installing the dependencies
 $ cd LegoDoc
 $ npm install
 $ cd web/lego/
+# npm install
 ```
 If you are running a development environment, use the following command:
 ```
@@ -76,7 +77,7 @@ Running the server
 ```
 $ node server.js
 ```
-The application will now be running on https://localhost:8081/
+The application will now be running on https://localhost:8080/
 
 ## Built With<a name="built_with"></a>
 + [MongoDB](https://www.mongodb.com/) - Database
@@ -88,7 +89,8 @@ The application will now be running on https://localhost:8081/
 + No mechanism to generate revenue apart from ads.
 
 ## Future Scope<a name="future_scope"></a>
-+ 
++ A GitHub type pull request / issues feature
++ Users being able to comment on the documents
 
 ## File Structure <a name="file_structure"></a>
 /server.js  : Main server code <br>
