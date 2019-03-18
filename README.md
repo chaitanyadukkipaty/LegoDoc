@@ -41,6 +41,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 What things you need to install the software and how to install them
+
 Installing NodeJs
 ```
 $ sudo apt-get install nodejs
@@ -62,7 +63,7 @@ Installing the dependencies
 $ cd LegoDoc
 $ npm install
 $ cd web/lego/
-# npm install
+$ npm install
 ```
 If you are running a development environment, use the following command:
 ```
@@ -94,7 +95,7 @@ The application will now be running on https://localhost:8080/
 
 ## File Structure <a name="file_structure"></a>
 /server.js  : Main server code <br>
-/web/ledgo  : Website code <br>
+/web/lego  : Website code <br>
 /models     : Data structures and methods to access them <br>
 
 ## Contributing<a name="contributing"></a>
