@@ -25,13 +25,13 @@
 + [Authors](#authors)
 
 ## About<a name="description"></a>
-+ LegoDoc is a platform for downloading / customizing contracts and other legal documents which are curated by the people.
-+ Our mission is to make these documents freely available for everyone, while in the process making them easier to customize and use.
++ LegoDoc is a platform for downloading / customizing contracts and other legal document templates which are curated by the people.
++ Our mission is to make these templates freely available for everyone, while in the process making them easier to customize and use.
 + Any registered user can upload or write a new document.
 + Posts will be filtered with the help of feedback (upvotes / downvotes).
 + Helping people save hundreds, or even thousands of rupees to make an enforceable agreement.
 + All the documents are free to download, customize and store.
-+ Note that every situation is unique and, if you are unsure of which document to use, we recommend you talk to an attorney.
++ Note that every situation is unique and, if you are unsure of which template to use, we recommend you talk to an attorney.
 + Remember: we do not and cannot provide legal advice. Neither are we a substitute for the work of a law firm or an attorney. 
 
 ## Getting Started<a name="getting_started"></a>
