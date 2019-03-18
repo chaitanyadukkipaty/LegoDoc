@@ -16,14 +16,14 @@
           <v-card-text class="text-lg-left">
               <h2  style="display: inline-block;">Username</h2><pre style="display: inline-block;"> : </pre>
               <h5 class="headline" style="color:#0356B3; display: inline-block;">{{this.username}}</h5><br />
-              <h2 style="display: inline-block;">Type</h2><pre style="display: inline-block;">       : </pre>
+              <h2 style="display: inline-block;">Type</h2><pre style="display: inline-block;"> : </pre>
               <h5 class="headline" style="color:#0356B3; display: inline-block;">{{this.type}}</h5><br />
-              <h2 style="display: inline-block;">Date</h2><pre style="display: inline-block;">       : </pre>
+              <h2 style="display: inline-block;">Date</h2><pre style="display: inline-block;"> : </pre>
               <h5 class="headline" style="color:#0356B3; display: inline-block;">{{this.date}}</h5><br />
               <br />
             </h6>
             </v-card-text>
-            <v-btn @click="clickme" class="sai" block color="primary" dark>Download</v-btn>
+            <v-btn @click="clickme" class="sai" block color="primary" dark>Download<pre> </pre><v-icon small>save_alt</v-icon></v-btn>
       </v-card>
       </v-flex>
       </v-layout>
@@ -48,7 +48,7 @@ export default {
     return {
       title: 'Calden',
       des: 'Some Description',
-      date: '12/02/1999',
+      date: '17/03/2019',
       type: 'Chaitanya did not gave',
       username: 'calden',
       template: '<h1>Calde</h1>'
@@ -91,6 +91,7 @@ export default {
               this.type = res.data.type;
               this.username = res.data.username;
               this.des = res.data.des;
+
               document.getElementById('abc').innerHTML = res.data.template;
             })
             .catch((err)=>{

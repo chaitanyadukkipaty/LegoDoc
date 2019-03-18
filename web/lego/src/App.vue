@@ -6,7 +6,7 @@
     </head>
     <v-app id="inspire">
       <v-toolbar dark color="#0356B3">
-        <v-toolbar-title class="white--text">Lego Doc</v-toolbar-title>
+        <router-link :to="{ path: '/home'}"><v-toolbar-title class="white--text">Lego Doc</v-toolbar-title></router-link>
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
           <v-btn flat to="/home" v-if="authenticated == false" class="font-weight-regular">Home</v-btn>

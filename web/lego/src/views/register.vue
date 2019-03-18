@@ -1,15 +1,37 @@
 <template lang="html">
   <v-app id="inspire">
+    <vue-particles
+    color="#dedede"
+    :particleOpacity="1"
+    :particlesNumber="100"
+    shapeType="circle"
+    :particleSize="5"
+    linesColor="#000"
+    :linesWidth="1"
+    :lineLinked="true"
+    :lineOpacity="0.4"
+    :linesDistance="150"
+    :moveSpeed="3"
+    :hoverEffect="true"
+    hoverMode="grab"
+    :clickEffect="true"
+    clickMode="push"
+    >
+    </vue-particles>
     <v-content>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4>
+            <v-dialog
+        v-model="dialog"
+        width="500"
+      >
             <v-card class="elevation-12">
               <v-form
               ref="form"
               lazy-validation>
                 <v-toolbar dark color="primary">
-                  <v-toolbar-title>Login form</v-toolbar-title>
+                  <v-toolbar-title>Register</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
                     <v-text-field
@@ -54,6 +76,7 @@
                 </v-card-actions>
               </v-form>
             </v-card>
+          </v-dialog>
           </v-flex>
         </v-layout>
       </v-container>
@@ -68,6 +91,7 @@ export default {
   name: 'register',
   data() {
     return {
+      dialog: true,
       username: "",
       name:"",
       email: "",
@@ -92,7 +116,7 @@ export default {
           const val = {username,name,email,password}
           console.log(typeof(val))
           //this.$router.app.$emit("authenticated",true);
-          axios.post('http://192.168.43.229/register', {
+          axios.post('http://192.168.43.229:8081/register', {
             username,
             name,
             email,

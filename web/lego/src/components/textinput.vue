@@ -7,33 +7,65 @@
           ref="form"
           v-model="valid"
           lazy-validation>
+          <v-container >
+            <v-flex xs10 offset-xs1>
                 <v-text-field
                 label="Title"
                 type="text"
                 v-model="name"
                 required>
                 </v-text-field>
+            </v-flex>
+            <v-flex xs10 offset-xs1>
+                <v-select
+                  v-model="typeSelect"
+                  :items="typeList"
+                  label="Type"
+                ></v-select>
+            </v-flex>
+            <v-flex xs10 offset-xs1>
                 <v-textarea
                   outline
                   name="des"
                   label="Description"
                   v-model="des"
                 ></v-textarea>
-                <v-select
-                  v-model="typeSelect"
-                  :items="typeList"
-                  label="Type"
-                ></v-select>
+            </v-flex>
+
+            </v-container>
           </v-form>
-          <!-- <div class="heading">Your Important Document</div>
-          <div id="calden" class="editor" contenteditable style="border-style: solid; border-width: 2px;">
-            <p>Your document goes here</p>
-          </div> -->
+
           <editor/>
+          <v-flex xs8 offset-xs2>
+          <v-alert
+        :value="true"
+        type="info"
+      >
+        Use ~ to create input text, eg: ~Name~
+      </v-alert>
+    </v-flex>
+          <v-flex xs10 offset-xs9>
+          <v-btn @click="clickme" class="sai" color="primary" dark right large>Upload</v-btn></v-flex>
         </v-flex>
-        <v-btn @click="clickme" class="sai" block color="secondary" dark>Block Button</v-btn>
+
+
+
       </v-layout>
     </v-container>
+    <v-snackbar
+       v-model="snackbar"
+       :timeout="4000"
+       :top="true"
+     >
+       {{ this.text }}
+       <v-btn
+         color="pink"
+         flat
+         @click="snackbar = false"
+       >
+         Close
+       </v-btn>
+     </v-snackbar>
   </v-app>
 </template>
 
@@ -48,7 +80,9 @@ export default {
   props: ["username"],
   data() {
     return {
+      snackbar: false,
       valid: false,
+      text: '',
       name: '',
       des: '',
       typeSelect: '',
@@ -88,8 +122,12 @@ export default {
          .then((res) => {
            console.log(res.data);
            this.array = res.data;
+           this.text = "Successful upload";
          })
-         .catch();
+         .catch((err) => {
+           this.text = "Unsucessful upload";
+         });
+         this.snackbar = true;
     }
   }
 }

@@ -87,7 +87,7 @@ html{
 .toolbar{
     display:grid;
     grid-template-columns: repeat(auto-fit,minmax(20px,40px));
-    color: rgb(0, 0, 0);
+    color: #000;
     grid-gap: 1rem;
     padding: 1rem;
     justify-content: center;

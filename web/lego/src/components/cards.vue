@@ -15,7 +15,7 @@
         <v-flex xs6>
           <v-combobox
             v-model="name"
-            :items="array1"
+            :items="sortedArray1"
             label="Search for your template"
             item-text="name"
             single-line
@@ -31,7 +31,7 @@
             xs12
             md6
             lg4
-            v-for="n in array1"
+            v-for="n in sortedArray1"
             :key="n._id"
           >
             <v-card
@@ -41,7 +41,7 @@
               max-width="400"
               min-height="200"
             >
-              <v-card-title @click="myfun(n)">
+              <v-card-title class="myclass" @click="myfun(n)">
                 <span class="headline font-condensed">{{n.name}}</span>
               </v-card-title>
 
@@ -129,6 +129,30 @@ export default {
       array1: [
 
       ],
+    }
+  },
+  computed: {
+    sortedArray: function() {
+      function compare(a, b) {
+        if (a.upvotes < b.upvotes)
+          return 1;
+        if (a.upvotes > b.upvotes)
+          return -1;
+        return 0;
+      }
+
+      return this.array.sort(compare);
+    },
+    sortedArray1: function() {
+      function compare(a, b) {
+        if (a.upvotes < b.upvotes)
+          return 1;
+        if (a.upvotes > b.upvotes)
+          return -1;
+        return 0;
+      }
+
+      return this.array1.sort(compare);
     }
   },
   methods: {
@@ -227,5 +251,8 @@ letter-spacing: .02em !important;
 }
 #app{
   background: #BBDEFB
+}
+.myclass{
+  cursor: pointer;
 }
 </style>
