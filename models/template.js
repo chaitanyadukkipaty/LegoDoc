@@ -11,7 +11,7 @@ module.exports=mongoose.model("Template",{
     }],
     upvotes : {
         type : Number,
-        default : 1
+        default : 1 + Math.floor(Math.random()*10)
     },
     downvotes : {
         type : Number,
