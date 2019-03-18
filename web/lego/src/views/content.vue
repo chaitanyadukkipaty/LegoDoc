@@ -35,6 +35,7 @@
 
 <script>
 import axios from 'axios';
+var {ip} = require('../IP.js')
 import commets from '../components/comments.vue'
 import editor from '../components/editor.vue'
 export default {
@@ -58,13 +59,13 @@ export default {
     clickme() {
       var editorContent = document.querySelector(".editor");
       const htmldata = editorContent.innerHTML;
-      axios.post('http://192.168.43.229:8081/printPDF', {
+      axios.post(`http://${ip}/printPDF`, {
         htmldata
       })
         .then((res) => {
           const filename = res.data
           axios({
-            url: 'http://192.168.43.229:8081/printPDF/'+filename,
+            url: `http://${ip}/printPDF/`+filename,
             method: 'GET',
             responseType: 'blob', // important
           }).then((response) => {
@@ -82,7 +83,7 @@ export default {
   created() {
          this._id = this.$route.params._id;
          const _id = this._id;
-         axios.post('http://192.168.43.229:8081/viewtemplate', {
+         axios.post(`http://${ip}/viewtemplate`, {
            _id
           })
             .then((res) => {

@@ -86,6 +86,7 @@
 
 <script>
 import axios from 'axios';
+var {ip} = require('../IP.js')
 import VueRecaptcha from 'vue-recaptcha';
 export default {
   name: 'register',
@@ -116,7 +117,7 @@ export default {
           const val = {username,name,email,password}
           console.log(typeof(val))
           //this.$router.app.$emit("authenticated",true);
-          axios.post('http://192.168.43.229:8081/register', {
+          axios.post(`http://${ip}/register`, {
             username,
             name,
             email,

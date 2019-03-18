@@ -56,6 +56,7 @@
 
 <script>
 import axios from 'axios';
+var {ip} = require('../IP.js')
 export default {
   name: 'btn',
   data() {
@@ -77,7 +78,7 @@ export default {
           const type = this.type;
           const userfile = this.userfile;
           //this.$router.app.$emit("authenticated",true);
-          axios.post('http://10.42.0.61:8081/fileupload', {
+          axios.post(`http://${ip}/fileupload`, {
             name,
             des,
             type,

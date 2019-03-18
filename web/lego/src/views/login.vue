@@ -79,6 +79,7 @@
 
 <script>
 import axios from 'axios';
+var {ip} = require('../IP.js')
   export default {
     name: "login",
     data() {
@@ -104,7 +105,7 @@ import axios from 'axios';
           const username=this.id;
           const password=this.password;
           //this.$router.app.$emit("authenticated",true);
-          axios.post('http://192.168.43.229:8081/login', {
+          axios.post(`http://${ip}/login`, {
             username,
             password
           })

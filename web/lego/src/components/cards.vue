@@ -101,6 +101,7 @@
 
 <script>
 import axios from 'axios';
+var {ip} = require('../IP.js')
 export default {
   name: 'cards',
   props: ["authenticated"],
@@ -222,7 +223,7 @@ export default {
   },
   created() {
     //this.tid = this.$route.params.tid;
-    axios.post('http://192.168.43.229:8081/', {
+    axios.post(`http://${ip}/`, {
      })
        .then((res) => {
          console.log(res.data);

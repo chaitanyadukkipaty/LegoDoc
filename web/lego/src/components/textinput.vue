@@ -71,6 +71,7 @@
 
 <script>
 import editor from './editor.vue'
+var {ip} = require('../IP.js')
 import axios from 'axios';
 export default {
   name: 'textinput',
@@ -112,7 +113,7 @@ export default {
       const des = this.des;
       const type = this.typeSelect;
       const template = s;
-      axios.post('http://192.168.43.229:8081/uploadtemplate', {
+      axios.post(`http://${ip}/uploadtemplate`, {
         username,
         name,
         des,
