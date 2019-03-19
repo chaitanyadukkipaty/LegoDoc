@@ -14,7 +14,7 @@
 ---
 
 <p align="center">Open source platform for sharing legal document templates.</p>
-<p align="center">Currently live on: http://206.189.135.147</p>
+<p align="center">Currently live on: http://206.189.135.147:8000</p>
 
 # Table of Content
 + [About](#description)
