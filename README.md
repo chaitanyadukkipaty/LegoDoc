@@ -14,6 +14,8 @@
 
 <p align="center">Open source platform for sharing legal document templates.</p>
 <p align="center">Currently live on: http://159.65.144.246:8000</p>
+<p align="center">username: calden123, password: calden123</p>
+<p align="center">Please Login to use the webpage</p>
 
 # Table of Content
 + [About](#description)
