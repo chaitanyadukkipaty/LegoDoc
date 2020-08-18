@@ -10,7 +10,6 @@
 
 </div>
 <p align="center">Currently live on: https://legodoc.chaitanyad.com/</p>
----
 
 # Table of Content
 + [About](#description)
