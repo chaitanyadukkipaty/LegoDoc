@@ -9,7 +9,7 @@
   [![License](https://img.shields.io/badge/license-GNU-blue.svg)](LICENSE.md)
 
 </div>
-
+<p align="center">Currently live on: https://legodoc.chaitanyad.com/</p>
 ---
 
 # Table of Content
